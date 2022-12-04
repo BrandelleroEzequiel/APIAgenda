@@ -80,3 +80,5 @@ C:\Users\Ezequiel\Desktop\Agenda Eze\BEAgendaTelefonica\BEAgenda\obj\Debug\net6.
 C:\Users\Ezequiel\Desktop\Agenda Eze\BEAgendaTelefonica\BEAgenda\obj\Debug\net6.0\BEAgenda.pdb
 C:\Users\Ezequiel\Desktop\Agenda Eze\BEAgendaTelefonica\BEAgenda\obj\Debug\net6.0\BEAgenda.genruntimeconfig.cache
 C:\Users\Ezequiel\Desktop\Agenda Eze\BEAgendaTelefonica\BEAgenda\obj\Debug\net6.0\ref\BEAgenda.dll
+C:\Users\Ezequiel\Desktop\Agenda Eze\BEAgendaTelefonica\BEAgenda\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\Ezequiel\Desktop\Agenda Eze\BEAgendaTelefonica\BEAgenda\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

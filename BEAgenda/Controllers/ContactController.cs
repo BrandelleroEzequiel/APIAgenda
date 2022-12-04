@@ -1,4 +1,7 @@
-﻿using BEAgenda.Models;
+﻿using AutoMapper;
+using BEAgenda.Models;
+using BEAgenda.Models.DTO;
+using BEAgenda.Models.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +12,13 @@ namespace BEAgenda.Controllers
     [ApiController]
     public class ContactController : ControllerBase
     {
-        private readonly AplicationDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly IContactRepository _contactRepository;
 
-        public ContactController(AplicationDbContext context)
+        public ContactController(IMapper mapper,IContactRepository contactRepository) 
         {
-            _context = context; 
+            _mapper = mapper;
+            _contactRepository = contactRepository;
         }
 
 
@@ -22,8 +27,11 @@ namespace BEAgenda.Controllers
         {
            try
             {
-                var listContacts = await _context.Contacts.ToListAsync();
-                return Ok(listContacts);
+                var listContacts = await _contactRepository.GetListContacts();
+
+                var listContactsDto = _mapper.Map<IEnumerable<ContactDTO>>(listContacts);
+
+                return Ok(listContactsDto);
             }
             catch (Exception ex)
             {  
@@ -37,14 +45,16 @@ namespace BEAgenda.Controllers
         {
             try
             {
-                var contact = await _context.Contacts.FindAsync(id);
+                var contact = await _contactRepository.GetContact(id);
                 
                 if(contact == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(contact);
+                var contactDto = _mapper.Map<ContactDTO>(contact);
+
+                return Ok(contactDto);
 
             }
             catch (Exception ex)
@@ -55,36 +65,48 @@ namespace BEAgenda.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Contact contact)
+        public async Task<IActionResult> Post([FromBody] ContactDTO contactDto)
         {
             try
             {
-                _context.Add(contact);
-                await _context.SaveChangesAsync();
+                var contact = _mapper.Map<Contact>(contactDto);
 
-                return Ok(contact);
+                contact = await _contactRepository.AddContact(contact);
+
+                var contactItemDto = _mapper.Map<ContactDTO>(contact);
+
+                return Ok(contactItemDto);
 
             }
             catch (Exception ex)
-            {
+            { 
                 return BadRequest(ex.Message);
             }
         }
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Contact contact)
+        public async Task<IActionResult> Put(int id, [FromBody] ContactDTO contactDto)
         {
             try
             {
+                var contact = _mapper.Map<Contact>(contactDto);
+
                 if (id != contact.id)
                 {
                     return BadRequest();
                 }
 
-                _context.Update(contact);
-                await _context.SaveChangesAsync();
-                return Ok(new { message = "Contacto actualizado con éxito!" });
+                var contactItem = await _contactRepository.GetContact(id);
+
+                if (contactItem == null)
+                {
+                    return NotFound();
+                }
+
+                await _contactRepository.UpdateContact(contact);  
+
+                return NoContent();
 
             }
             catch (Exception ex)
@@ -100,15 +122,15 @@ namespace BEAgenda.Controllers
             try
             {
 
-                var contact = await _context.Contacts.FindAsync(id);
+                var contact = await _contactRepository.GetContact(id);
 
                 if (contact == null)
                 {
                     return NotFound();
                 }
 
-                _context.Contacts.Remove(contact);
-                await _context.SaveChangesAsync();
+                await _contactRepository.DeleteContact(contact);
+
                 return Ok(new { message = "Contacto eliminado con éxito!" });
 
             }

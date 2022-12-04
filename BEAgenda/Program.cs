@@ -1,4 +1,5 @@
 using BEAgenda.Models;
+using BEAgenda.Models.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,13 @@ builder.Services.AddDbContext<AplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Conexion"));
 });
+
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(Program));
+
+
+// Add Services
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
 
 var app = builder.Build();
 
