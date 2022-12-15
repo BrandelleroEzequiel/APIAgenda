@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using BEAgenda.Data.Repository.Interfaces;
+using BEAgenda.Entities;
 using BEAgenda.Models;
-using BEAgenda.Models.DTO;
-using BEAgenda.Models.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

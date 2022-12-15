@@ -1,5 +1,6 @@
-using BEAgenda.Models;
-using BEAgenda.Models.Repository;
+using BEAgenda.Data;
+using BEAgenda.Data.Repository.Implementations;
+using BEAgenda.Data.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
